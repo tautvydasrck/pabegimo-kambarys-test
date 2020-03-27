@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">    
+    <title></title>
+</head>
+<body>
+    <div class="container">
+        <header class="row pt-4 pb-4 border-bottom">
+            <div class="col-12 d-flex justify-content-start m-0 p-0">
+                <h1 class="display-4" style="font-size: 2.5rem">Pabėgimo kambarys test1</h1>
+            </div>
+        </header>
+        <div class="row pt-4">
+            <aside class="col-2 p-0">
+                <div class="mb-4 p-3 border rounded-lg bg-light">
+                    <div>Darbuotojas:</div>
+                    <div class="font-weight-bold">{{ user.username }}</div>
+                    <a href="{% url 'logout' %}">Atsijungti</a>
+                </div>
+                <nav class="btn-group-vertical w-100">
+                    <a class="btn btn-primary btn-block d-flex justify-content-start" href="{% url 'game_registration:index' %}" role="button">Žaidimų sąrašas</a>
+                    <a class="btn btn-primary btn-block d-flex justify-content-start" href="{% url 'game_registration:new_game' %}" role="button">Naujas žaidimas</a>                                        
+                    <a class="btn btn-primary btn-block d-flex justify-content-start" href="{% url 'game_registration:game_types' %}" role="button">Žaidimų tipai</a>
+                    <button type="button" class="btn btn-primary btn-block d-flex justify-content-start">Apklausos</button>
+                    <button type="button" class="btn btn-primary btn-block d-flex justify-content-start">Apklausų nustatymai</button>
+                    <a class="btn btn-primary btn-block d-flex justify-content-start" href="{% url 'users:employees' %}" role="button">Darbuotojai</a>
+                </nav>
+            </aside>
+            {% block content %}
+            {% endblock %}
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+</body>
+</html>

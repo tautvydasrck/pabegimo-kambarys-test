@@ -1,0 +1,118 @@
+{% extends 'game_registration/base.html' %}
+
+{% block content %}
+<div class="col-10 pl-5">
+    <h4 class="mb-4">Žaidimo redagavimas</h4>
+    <form action="{% url 'game_registration:edit_game_submit' game.id %}" method="POST">
+        {% csrf_token %}
+        <table class="table table-sm">
+            <tbody>
+                <tr class="form-group">
+                    <th scope="row">
+                        <label for="inputDateTime" class="col-form-label">Data ir laikas</label>
+                    </th>
+                    <td>
+                        <input type="datetime-local" class="form-control" id="inputDateTime" name="inputDateTime" value="{{ game.date_time|date:'Y-m-d'}}T{{ game.date_time|date:'H:i' }}">
+                    </td>
+                </tr>
+                <tr class="form-group">
+                    <th scope="row">
+                        <label class="col-form-label" for="selectGameType">Žaidimo tipas</label>
+                    </th>
+                    <td>
+                        <select class="custom-select" id="selectGameType" name="selectGameType" onchange="priceChange()">
+                            {% for game_type_one in game_types_list.all %}
+                                <option id="gameType{{ game_type_one.id }}" value="{{ game_type_one.id }}" price="{{ game_type_one.price }}" {% if game_type_one == game.game_type %} selected {% endif %} >
+                                    {{ game_type_one }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr class="form-group">
+                    <th scope="row">
+                        <label for="inputClient" class="col-form-label">Klientas</label>
+                    </th>
+                    <td>
+                        <input type="text" class="form-control" id="inputClient" name="inputClient" placeholder="Klientas" value="{{ game.client }}">
+                    </td>
+                </tr>
+                <tr class="form-group">
+                    <th scope="row">
+                        <label for="inputEmail" class="col-form-label">Kliento el. paštas</label>
+                    </th>
+                    <td>
+                        <input type="email" class="form-control" id="inputEmail" name="inputEmail" placeholder="El. paštas" value="{{ game.client.email }}">
+                    </td>
+                </tr>
+                <tr class="form-group">
+                    <th scope="row">
+                        <label for="inputPhone" class="col-form-label">Kliento telefono nr.</label>
+                    </th>
+                    <td>
+                        <input type="text" class="form-control" id="inputPhone" name="inputPhone" placeholder="Telefono nr." value="{{ game.client.phone }}">
+                    </td>
+                </tr>
+                <tr class="form-group">
+                    <th scope="row">
+                        <label for="checkJuridical" class="col-form-label">Juridinis asmuo</label>
+                    </th>
+                    <td>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="checkJuridical" name="checkJuridical" {% if game.client.juridical %} checked {% endif %} value="1">
+                        </div>
+                    </td>
+                </tr>
+                <tr class="form-group">
+                    <th scope="row">
+                        <label for="checkHall" class="col-form-label">Salė</label>
+                    </th>
+                    <td>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="checkHall" name="checkHall" {% if game.hall %} checked {% endif %} value="1">
+                        </div>
+                    </td>
+                </tr>
+                <tr class="form-group">
+                    <th scope="row">
+                        <label for="inputPrice" class="col-form-label">Kaina</label>
+                    </th>
+                    <td class="d-flex align-items-center">
+                        <input type="number" class="form-control col-2" id="inputPrice" name="inputPrice" placeholder="Kaina" value="{{ game.price }}"><span class="ml-1">&euro;</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="row d-flex justify-content-end">
+            <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalSave">Išsaugoti pakeitimus</button>
+            <div class="modal fade" id="modalSave" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Išsaugoti pakeitimus?</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            Ar tikrai norite išsaugoti pakeitimus?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Grįžti į redagavimą</button>
+                            <button type="submit" class="btn btn-primary">Išsaugoti</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <a class="btn btn-danger ml-2" href="{% url 'game_registration:index' %}" role="button">Atšaukti redagavimą</a>
+        </div>            
+    </form>
+</div>
+<script>
+    function priceChange() {
+        var gameTypeId = document.getElementById("selectGameType").value;
+        var gameTypePrice = document.getElementById("gameType" + gameTypeId).getAttribute("price");
+        document.getElementById("inputPrice").value = gameTypePrice;
+    }
+</script>
+{% endblock %}

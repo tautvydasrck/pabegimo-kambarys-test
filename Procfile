@@ -1,0 +1,1 @@
+web: cd pabegimo_kambarys_test1; gunicorn pabegimo_kambarys_test1.wsgi --log-file -

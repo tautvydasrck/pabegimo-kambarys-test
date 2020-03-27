@@ -1,0 +1,90 @@
+{% extends 'game_registration/base.html' %}
+
+{% block content %}
+<div class="col-10 pl-5">
+    <h4 class="mb-4">Žaidimų tipai</h4>
+    <table class="table table-sm">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Pavadinimas</th>
+                <th scope="col">Numatyta kaina</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for game_type in game_types_list.all %}
+                <form action="{% url 'game_registration:game_types_edit' game_type.id %}" method="POST">
+                    {% csrf_token %}
+                    <tr class="form-group">
+                        <th scope="row">
+                            <label class="col-form-label">{{ forloop.counter }}</label>
+                        </th>
+                        <td>
+                            <input type="text" class="form-control" id="inputName{{ game_type.id }}" name="inputName" placeholder="Pavadinimas" value="{{ game_type }}">
+                        </td>
+                        <td class="d-flex align-items-center">
+                            <input type="number" class="form-control col-6" id="inputPrice{{ game_type.id }}" name="inputPrice" placeholder="Kaina" value="{{ game_type.price }}"><span class="ml-1">&euro;</span>
+                        </td>
+                        <td >
+                            <button type="submit" class="form-control btn btn-secondary">Išsaugoti</button>
+                        </td>
+                        </form>
+                        <td>
+                            <form action="{% url 'game_registration:game_types_delete' game_type.id %}" method="POST">
+                                {% csrf_token %}
+                                <button type="button" class="form-control btn btn-danger" data-toggle="modal" data-target="#modalGameType{{ game_type.id }}">Ištrinti</button>
+                                <div class="modal fade" id="modalGameType{{ game_type.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Ištrynimo patvirtinimas</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Ar tikrai norite ištrinti žaidimo tipą "{{ game_type }}"?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Grįžti</button>
+                                                <button type="submit" class="btn btn-danger">Ištrinti</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </td>
+                    </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <h5 class="lead mb-3 mt-4">Naujas žaidimo tipas</h5>
+    <table class="table table-sm">
+        <thead>
+            <tr>
+                <th scope="col">Pavadinimas</th>
+                <th scope="col">Numatyta kaina</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <form action="{% url 'game_registration:game_types_new_submit' %}" method="POST">
+                {% csrf_token %}
+                <tr class="form-group">
+                    <td>
+                        <input type="text" class="form-control" id="inputNameNew" name="inputName" placeholder="Pavadinimas" value="">
+                    </td>
+                    <td class="d-flex align-items-center">
+                        <input type="number" class="form-control col-6" id="inputPriceNew" name="inputPrice" placeholder="Kaina" value=""><span class="ml-1">&euro;</span>
+                    </td>
+                    <td >
+                        <button type="submit" class="form-control btn btn-secondary">Išsaugoti</button>
+                    </td>
+                </tr>
+            </form>
+        </tbody>
+    </table>
+</div>
+{% endblock %}

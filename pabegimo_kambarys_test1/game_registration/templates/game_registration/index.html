@@ -1,0 +1,209 @@
+{% extends 'game_registration/base.html' %}
+
+{% block content %}
+<div class="col-10 pl-5">
+    <h4 class="mb-4">Žaidimų sąrašas</h4>
+    <h5 class="lead mb-3">Būsimi žaidimai</h5>
+    {% if games_list_upcoming %}
+        <div id="accordionUpcoming">
+            {% for game in games_list_upcoming %}
+                <div class="card">
+                    <div class="card-header p-0" id="headingUpcoming{{ forloop.counter }}">
+                        <button class="btn btn-link" data-toggle="collapse" data-target="#collapseUpcoming{{ forloop.counter }}" aria-expanded="false" aria-controls="collapseOne">
+                            {{ game }}
+                        </button>
+                    </div>
+                    <div id="collapseUpcoming{{ forloop.counter }}" class="collapse" aria-labelledby="headingUpcoming{{ forloop.counter }}" data-parent="#accordionUpcoming">
+                        <div class="card-body">
+                            <table class="table table-sm">
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">Data ir laikas</th>
+                                        <td>{{ game.date_time|date:'Y-m-d H:i' }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Žaidimo tipas</th>
+                                        <td>{{ game.game_type }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Klientas</th>
+                                        <td>{{ game.client }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Kliento el. paštas</th>
+                                        <td>{{ game.client.email }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Kliento telefono nr.</th>
+                                        <td>{{ game.client.phone }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Asmens tipas</th>
+                                        <td>
+                                            {% if game.client.juridical %}
+                                                Juridinis
+                                            {% else %}
+                                                Fizinis
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Salė</th>
+                                        <td>
+                                            {% if game.hall %}
+                                                Taip
+                                            {% else %}
+                                                Ne
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Kaina</th>
+                                        <td id="inputPrice">
+                                            {{ game.price }}&euro;
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="row">
+                                <div class="col-6">
+                                    <a class="btn btn-secondary" href="#" role="button">Apklausos rezultatai</a>
+                                </div>
+                                <div class="col-6 d-flex justify-content-end">
+                                    <a role="button" class="btn btn-warning ml-2" href="{% url 'game_registration:edit_game' game.id %}">Redaguoti</a>
+                                    <button type="button" class="btn btn-danger ml-2" data-toggle="modal" data-target="#modalUpcoming{{ forloop.counter }}">Ištrinti</button>
+                                    <div class="modal fade" id="modalUpcoming{{ forloop.counter }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Ištrynimo patvirtinimas</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Ar tikrai norite ištrinti pasirinktą žaidimą?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Atšaukti</button>
+                                                    <form  action="{% url 'game_registration:delete_game' game.id %}" method="POST">
+                                                        {% csrf_token %}
+                                                        <button type="submit" class="btn btn-danger">Ištrinti</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div>Nėra žaidimų</div>
+    {% endif %}
+    <h5 class="lead mt-4 mb-3">Praėję žaidimai</h5>
+    {% if games_list_history %}
+        <div id="accordionHistory">
+            {% for game in games_list_history %}
+                <div class="card">
+                    <div class="card-header p-0" id="headingHistory{{ forloop.counter }}">
+                        <button class="btn btn-link" data-toggle="collapse" data-target="#collapseHistory{{ forloop.counter }}" aria-expanded="false" aria-controls="collapseOne">
+                            {{ game }}
+                        </button>
+                    </div>
+                    <div id="collapseHistory{{ forloop.counter }}" class="collapse" aria-labelledby="headingHistory{{ forloop.counter }}" data-parent="#accordionHistory">
+                        <div class="card-body">
+                            <table class="table table-sm">
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">Data ir laikas</th>
+                                        <td>{{ game.date_time|date:'Y-m-d H:i' }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Žaidimo tipas</th>
+                                        <td>{{ game.game_type }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Klientas</th>
+                                        <td>{{ game.client }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Kliento el. paštas</th>
+                                        <td>{{ game.client.email }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Kliento telefono nr.</th>
+                                        <td>{{ game.client.phone }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Asmens tipas</th>
+                                        <td>
+                                            {% if game.client.juridical %}
+                                                Juridinis
+                                            {% else %}
+                                                Fizinis
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Salė</th>
+                                        <td>
+                                            {% if game.hall %}
+                                                Taip
+                                            {% else %}
+                                                Ne
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Kaina</th>
+                                        <td>
+                                            {{ game.price }}&euro;
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="row">
+                                <div class="col-6">
+                                    <a class="btn btn-secondary" href="#" role="button">Apklausos rezultatai</a>
+                                </div>
+                                <div class="col-6 d-flex justify-content-end">
+                                    <a role="button" class="btn btn-warning ml-2" href="{% url 'game_registration:edit_game' game.id %}">Redaguoti</a>
+                                    <button type="button" class="btn btn-danger ml-2" data-toggle="modal" data-target="#modalHistory{{ forloop.counter }}">Ištrinti</button>
+                                    <div class="modal fade" id="modalHistory{{ forloop.counter }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Ištrynimo patvirtinimas</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Ar tikrai norite ištrinti pasirinktą žaidimą?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Atšaukti</button>
+                                                    <form  action="{% url 'game_registration:delete_game' game.id %}" method="POST">
+                                                        {% csrf_token %}
+                                                        <button type="submit" class="btn btn-danger">Ištrinti</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div>Nėra žaidimų</div>
+    {% endif %}
+</div>
+{% endblock %}
